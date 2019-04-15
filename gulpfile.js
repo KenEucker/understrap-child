@@ -6,7 +6,7 @@ const cssnano = require( 'gulp-cssnano' );
 const rename = require( 'gulp-rename' );
 const concat = require( 'gulp-concat' );
 const uglify = require( 'gulp-uglify' );
-const browserify = require( 'gulp-bro' );
+const babel = require( 'gulp-babel' );
 const imagemin = require( 'gulp-imagemin' );
 const ignore = require( 'gulp-ignore' );
 const rimraf = require( 'gulp-rimraf' );
@@ -131,7 +131,7 @@ gulp.task( 'scripts', function () {
         `${ paths.dev }/js/skip-link-focus-fix.js`,
 
         // jsx entry file
-        `${ paths.dev }/js/app.js`,
+        `${ paths.dev }/js/app.jsx`,
 
         // Adding currently empty javascript file to add on for your own themes´ customizations
         // Please add any customizations to this .js file only!
@@ -139,16 +139,16 @@ gulp.task( 'scripts', function () {
     ];
 
     const gulpOpts = { allowEmpty: true },
-        browserifyOpts = { ignoreMissing: true };
+        babelOpts = {presets: ['@babel/preset-env', '@babel/preset-react'] };
 
     gulp.src( scripts, gulpOpts )
-        .pipe( browserify( browserifyOpts ) )
+        .pipe( babel( babelOpts ) )
         .pipe( concat( 'child-theme.min.js' ) )
         .pipe( uglify() )
         .pipe( gulp.dest( paths.js ) );
 
     return gulp.src( scripts, gulpOpts )
-        .pipe( browserify( browserifyOpts ) )
+        .pipe( babel( babelOpts ) )
         .pipe( concat( 'child-theme.js' ) )
         .pipe( gulp.dest( paths.js ) );
 } );

@@ -1,3 +1,5 @@
+'use scrict';
+
 var Loader = require('halogen/PulseLoader');
 var loaderComponent = React.createClass({
   render: function() {
