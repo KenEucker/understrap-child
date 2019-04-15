@@ -1,30 +1,31 @@
 // Defining requirements
-var gulp = require( 'gulp' );
-var plumber = require( 'gulp-plumber' );
-var sass = require( 'gulp-sass' );
-var cssnano = require( 'gulp-cssnano' );
-var rename = require( 'gulp-rename' );
-var concat = require( 'gulp-concat' );
-var uglify = require( 'gulp-uglify' );
-var imagemin = require( 'gulp-imagemin' );
-var ignore = require( 'gulp-ignore' );
-var rimraf = require( 'gulp-rimraf' );
-var sourcemaps = require( 'gulp-sourcemaps' );
-var browserSync = require( 'browser-sync' ).create();
-var del = require( 'del' );
-var cleanCSS = require( 'gulp-clean-css' );
-var replace = require( 'gulp-replace' );
-var autoprefixer = require( 'gulp-autoprefixer' );
+const gulp = require( 'gulp' );
+const plumber = require( 'gulp-plumber' );
+const sass = require( 'gulp-sass' );
+const cssnano = require( 'gulp-cssnano' );
+const rename = require( 'gulp-rename' );
+const concat = require( 'gulp-concat' );
+const uglify = require( 'gulp-uglify' );
+const browserify = require( 'gulp-bro' );
+const imagemin = require( 'gulp-imagemin' );
+const ignore = require( 'gulp-ignore' );
+const rimraf = require( 'gulp-rimraf' );
+const sourcemaps = require( 'gulp-sourcemaps' );
+const browserSync = require( 'browser-sync' ).create();
+const del = require( 'del' );
+const cleanCSS = require( 'gulp-clean-css' );
+const replace = require( 'gulp-replace' );
+const autoprefixer = require( 'gulp-autoprefixer' );
 
 // Configuration file to keep your code DRY
-var cfg = require( './gulpconfig.json' );
-var paths = cfg.paths;
+const cfg = require( './gulpconfig.json' );
+const paths = cfg.paths;
 
 // Run:
 // gulp sass
 // Compiles SCSS files in CSS
 gulp.task( 'sass', function() {
-    var stream = gulp.src( `${paths.sass}/*.scss` )
+    const stream = gulp.src( `${paths.sass}/*.scss` )
         .pipe( sourcemaps.init( { loadMaps: true } ) )
         .pipe( plumber( {
             errorHandler: function( err ) {
@@ -119,29 +120,38 @@ gulp.task( 'browser-sync', function() {
 // Run:
 // gulp scripts.
 // Uglifies and concat all JS files into one
-gulp.task( 'scripts', function() {
-    var scripts = [
+gulp.task( 'scripts', function () {
+    const scripts = [
 
         // Start - All BS4 stuff
-        `${paths.dev}/js/bootstrap4/bootstrap.bundle.js`,
+        `${ paths.dev }/js/bootstrap4/bootstrap.bundle.js`,
 
         // End - All BS4 stuff
 
-        `${paths.dev}/js/skip-link-focus-fix.js`,
+        `${ paths.dev }/js/skip-link-focus-fix.js`,
+
+        // jsx entry file
+        `${ paths.dev }/js/app.js`,
 
         // Adding currently empty javascript file to add on for your own themes´ customizations
         // Please add any customizations to this .js file only!
-        `${paths.dev}js/custom-javascript.js`,
+        `${ paths.dev }js/custom-javascript.js`,
     ];
-  gulp.src( scripts, { allowEmpty: true } )
-    .pipe( concat( 'child-theme.min.js' ) )
-    .pipe( uglify() )
-    .pipe( gulp.dest( paths.js ) );
 
-  return gulp.src( scripts, { allowEmpty: true } )
-    .pipe( concat( 'child-theme.js' ) )
-    .pipe( gulp.dest( paths.js ) );
-});
+    const gulpOpts = { allowEmpty: true },
+        browserifyOpts = { ignoreMissing: true };
+
+    gulp.src( scripts, gulpOpts )
+        .pipe( browserify( browserifyOpts ) )
+        .pipe( concat( 'child-theme.min.js' ) )
+        .pipe( uglify() )
+        .pipe( gulp.dest( paths.js ) );
+
+    return gulp.src( scripts, gulpOpts )
+        .pipe( browserify( browserifyOpts ) )
+        .pipe( concat( 'child-theme.js' ) )
+        .pipe( gulp.dest( paths.js ) );
+} );
 
 // Run:
 // gulp watch-bs
@@ -162,7 +172,7 @@ gulp.task( 'copy-assets', function() {
 
 ////////////////// All Bootstrap 4 Assets /////////////////////////
 // Copy all JS files
-    var stream = gulp.src( `${paths.node}bootstrap/dist/js/**/*.js` )
+const stream = gulp.src( `${paths.node}bootstrap/dist/js/**/*.js` )
         .pipe( gulp.dest( `${paths.dev}/js/bootstrap4` ) );
 
 // Copy all Bootstrap SCSS files
