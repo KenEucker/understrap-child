@@ -17,15 +17,15 @@ Understrap Child Theme uses the Enqueue method to load and sort the CSS file the
 1. Activate the UnderStrap Child theme
 
 ## Editing
-Add your own CSS styles to `/sass/theme/_child_theme.scss`
-or import you own files into `/sass/theme/understrap-child.scss`
+Add your own CSS styles to `/src/sass/theme/_child_theme.scss`
+or import you own files into `/src/sass/theme/understrap-child.scss`
 
 To overwrite Bootstrap's or UnderStrap's base variables just add your own value to:
-`/sass/theme/_child_theme_variables.scss`
+`/src/sass/theme/_child_theme_variables.scss`
 
 For example, the "$brand-primary" variable is used by both Bootstrap and UnderStrap.
 
-Add your own color like: `$brand-primary: #ff6600;` in `/sass/theme/_child_theme_variables.scss` to overwrite it. This change will automatically apply to all elements that use the $brand-primary variable.
+Add your own color like: `$brand-primary: #ff6600;` in `/src/sass/theme/_child_theme_variables.scss` to overwrite it. This change will automatically apply to all elements that use the $brand-primary variable.
 
 It will be outputted into:
 `/css/understrap-child.min.css` and `/css/understrap-child.css`

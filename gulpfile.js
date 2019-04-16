@@ -266,6 +266,7 @@ gulp.task( 'dist', gulp.series('clean-dist', function copyToDistFolder() {
             'readme.txt',
             'readme.md',
             'package.json',
+            'yarn-lock.json',
             'package-lock.json',
             'gulpfile.js',
             'gulpconfig.json',
@@ -277,7 +278,7 @@ gulp.task( 'dist', gulp.series('clean-dist', function copyToDistFolder() {
     ignoreFiles = ignoreFiles.map( _path => `!${path.resolve(_path)}` );
     ignorePaths = ignorePaths.map( _path => `!${path.resolve(_path)}` );
 
-    return gulp.src( ['**/*', '*', ...ignorePaths, ...ignoreFiles], { 'buffer': false } )
+    return gulp.src( ['**/*', ...ignorePaths, ...ignoreFiles ], { 'buffer': false } )
         .pipe( replace( '/js/jquery.slim.min.js', `${paths.js}/jquery.slim.min.js`, { 'skipBinary': true } ) )
         .pipe( replace( '/js/popper.min.js', `${paths.js}/popper.min.js`, { 'skipBinary': true } ) )
         .pipe( replace( '/js/skip-link-focus-fix.js', `${paths.js}/skip-link-focus-fix.js`, { 'skipBinary': true } ) )
@@ -293,10 +294,30 @@ gulp.task( 'clean-dist-product', function() {
 // gulp dist-product
 // Copies the files to the /dist-prod folder for distribution as theme with all assets
 gulp.task( 'dist-product', gulp.series('clean-dist-product', function copyToDistFolder() {
-    let ignorePaths = [ paths.bower, `${paths.bower}/**`, paths.node, `${paths.node}/**`, paths.dist, `${paths.dist}/**`, paths.distprod, `${paths.distprod}/**`];
-    ignorePaths = ignorePaths.map( _path => `!${path.resolve(_path)}` );
+    let ignorePaths = [ 
+        paths.bower, `${paths.bower}/**`,
+        paths.node, `${paths.node}/**`,
+        paths.dist, `${paths.dist}/**`,
+        paths.distprod, `${paths.distprod}/**`]
 
-    return gulp.src( ['**/*', ...ignorePaths, '*'] )
+        ignoreFiles = [ 
+            'readme.txt',
+            'readme.md',
+            'package.json',
+            'package-lock.json',
+            'yarn-lock.json',
+            'gulpfile.js',
+            'gulpconfig.json',
+            'CHANGELOG.md',
+            '.travis.yml',
+            'jshintignore',
+            'codesniffer.ruleset.xml' ];
+    ignorePaths = ignorePaths.map( _path => `!${path.resolve(_path)}` );
+    ignoreFiles = ignoreFiles.map( _path => `!${path.resolve(_path)}` );
+
+    const ignoreAllButMinifiedFiles = [ `!${paths.js}/**/!(*.min)*.js*`, `!${paths.js}/**/*.map`, `!${paths.css}/**/!(*.min)*.css*`, `!${paths.css}/**/*.map` ];
+
+    return gulp.src( ['**/*', ...ignorePaths, ...ignoreFiles, ...ignoreAllButMinifiedFiles ] )
         .pipe( gulp.dest( paths.distprod ) );
 } ));
 
