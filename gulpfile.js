@@ -109,7 +109,9 @@ gulp.task('react', function () {
     // set up the browserify instance on a task basis
     const build = browserify({
       entries: `${ paths.jsx }app.jsx`,
-      debug: true
+      extensions: [ '.jsx' ],
+      debug: true,
+      paths: [ path.resolve(paths.node), path.resolve(paths.jsx) ]
     });
 
     const babelifyOpts = { presets: ["@babel/preset-env", "@babel/preset-react"] };

@@ -61,6 +61,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "run-sequence": "^2.2.1",
+    "styled-components": "^4.2.0",
     "understrap": "^0.9.1",
     "undescores-for-npm": "^1.0.0",
     "vinyl-buffer": "^1.0.1",

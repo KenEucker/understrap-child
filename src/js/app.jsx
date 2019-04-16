@@ -1,20 +1,16 @@
 'use strict';
 
-import { React } from 'react';
+import React from 'react';
 import { render } from 'react-dom';
-
-function Welcome(props) {
-  return <h1>Hello, {props.name}</h1>;
-}
+import AtomSpinner from './app/AtomSpinner.jsx';
 
 function App() {
   return (
-    <div>
-      <Welcome name="Sara" />
-      <Welcome name="Cahal" />
-      <Welcome name="Edite" />
-    </div>
-  );
+    <AtomSpinner
+    color='#000000'
+    size='200'
+    />
+  )
 }
 
 render(
