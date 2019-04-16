@@ -12,6 +12,10 @@ const ignore = require( 'gulp-ignore' );
 const rimraf = require( 'gulp-rimraf' );
 const sourcemaps = require( 'gulp-sourcemaps' );
 const browserSync = require( 'browser-sync' ).create();
+const browserify = require( 'browserify' );
+const babelify = require('babelify');
+const source = require( 'vinyl-source-stream' );
+const buffer = require( 'vinyl-buffer' );
 const del = require( 'del' );
 const cleanCSS = require( 'gulp-clean-css' );
 const replace = require( 'gulp-replace' );
@@ -117,10 +121,40 @@ gulp.task( 'browser-sync', function() {
     browserSync.init( cfg.browserSyncWatchFiles, cfg.browserSyncOptions );
 } );
 
-// Run:
-// gulp scripts.
-// Uglifies and concat all JS files into one
-gulp.task( 'scripts', function () {
+gulp.task('react', async function (done) {
+    // set up the browserify instance on a task basis
+    const build = browserify({
+      entries: `${ paths.dev }/js/app.jsx`,
+      debug: true
+    });
+  
+    build.transform("babelify", { presets: ["@babel/preset-env", "@babel/preset-react"] })
+        .bundle()
+        .pipe( source('child-theme-app.js') )
+        .pipe( buffer() )
+        .pipe( sourcemaps.init({loadMaps: true}) )
+        .pipe( sourcemaps.write('./') )
+        .pipe( gulp.dest( paths.js ) );
+
+    const minBuild = browserify({
+        entries: `${ paths.dev }/js/app.jsx`,
+        debug: true
+        });
+  
+    return minBuild
+        .transform("babelify", { presets: ["@babel/preset-env", "@babel/preset-react"] })
+        .bundle()
+        .pipe( source('child-theme-app.min.js') )
+        .pipe( buffer() )
+        .pipe( sourcemaps.init({loadMaps: true}) )
+        .pipe( uglify() )
+        .pipe( sourcemaps.write('./') )
+        .pipe( gulp.dest( paths.js ) );
+
+    done();
+  });
+
+gulp.task( 'javascript', function () {
     const scripts = [
 
         // Start - All BS4 stuff
@@ -130,28 +164,27 @@ gulp.task( 'scripts', function () {
 
         `${ paths.dev }/js/skip-link-focus-fix.js`,
 
-        // jsx entry file
-        `${ paths.dev }/js/app.jsx`,
-
         // Adding currently empty javascript file to add on for your own themes´ customizations
         // Please add any customizations to this .js file only!
         `${ paths.dev }js/custom-javascript.js`,
     ];
 
-    const gulpOpts = { allowEmpty: true },
-        babelOpts = {presets: ['@babel/preset-env', '@babel/preset-react'] };
+    const gulpOpts = { allowEmpty: true };
 
     gulp.src( scripts, gulpOpts )
-        .pipe( babel( babelOpts ) )
         .pipe( concat( 'child-theme.min.js' ) )
         .pipe( uglify() )
-        .pipe( gulp.dest( paths.js ) );
+        .pipe( gulp.dest( paths.js ));
 
     return gulp.src( scripts, gulpOpts )
-        .pipe( babel( babelOpts ) )
         .pipe( concat( 'child-theme.js' ) )
-        .pipe( gulp.dest( paths.js ) );
+        .pipe( gulp.dest( paths.js ));
 } );
+
+// Run:
+// gulp scripts.
+// Uglifies and concat all JS files into one
+gulp.task( 'scripts', gulp.parallel( 'javascript', 'react' ));
 
 // Run:
 // gulp watch-bs
