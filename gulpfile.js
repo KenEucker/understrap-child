@@ -128,8 +128,10 @@ gulp.task('react', async function (done) {
       entries: `${ paths.dev }/js/app.jsx`,
       debug: true
     });
+
+    const babelifyOpts = { presets: ["@babel/preset-env", "@babel/preset-react"] };
   
-    build.transform("babelify", { presets: ["@babel/preset-env", "@babel/preset-react"] })
+    build.transform("babelify", babelifyOpts)
         .bundle()
         .pipe( source('child-theme-app.js') )
         .pipe( buffer() )
@@ -143,7 +145,7 @@ gulp.task('react', async function (done) {
         });
   
     return minBuild
-        .transform("babelify", { presets: ["@babel/preset-env", "@babel/preset-react"] })
+        .transform("babelify", babelifyOpts)
         .bundle()
         .pipe( source('child-theme-app.min.js') )
         .pipe( buffer() )
@@ -282,7 +284,7 @@ gulp.task( 'dist', gulp.series('clean-dist', function copyToDistFolder() {
     ignoreFiles = ignoreFiles.map( _path => `!${path.resolve(_path)}` );
     ignorePaths = ignorePaths.map( _path => `!${path.resolve(_path)}` );
 
-    return gulp.src( ['**/*', ...ignorePaths, ...ignoreFiles,  '*'], { 'buffer': false } )
+    return gulp.src( ['**/*',  '*', ...ignorePaths, ...ignoreFiles], { 'buffer': false } )
         .pipe( replace( '/js/jquery.slim.min.js', `/js${paths.vendor}/jquery.slim.min.js`, { 'skipBinary': true } ) )
         .pipe( replace( '/js/popper.min.js', `/js${paths.vendor}/popper.min.js`, { 'skipBinary': true } ) )
         .pipe( replace( '/js/skip-link-focus-fix.js', `/js${paths.vendor}/skip-link-focus-fix.js`, { 'skipBinary': true } ) )
