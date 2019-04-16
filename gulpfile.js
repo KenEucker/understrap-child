@@ -2,6 +2,7 @@
 const gulp = require( 'gulp' );
 const plumber = require( 'gulp-plumber' );
 const sass = require( 'gulp-sass' );
+const path = require( 'path' );
 const cssnano = require( 'gulp-cssnano' );
 const rename = require( 'gulp-rename' );
 const concat = require( 'gulp-concat' );
@@ -258,14 +259,34 @@ gulp.task( 'clean-dist', function() {
 // gulp dist
 // Copies the files to the /dist folder for distribution as simple theme
 gulp.task( 'dist', gulp.series('clean-dist', function copyToDistFolder() {
-    const ignorePaths = [`!${paths.bower}`, `!${paths.bower}/**`, `!${paths.node}`, `!${paths.node}/**`, `!${paths.dev}`, `!${paths.dev}/**`, `!${paths.dist}`, `!${paths.dist}/**`, `!${paths.distprod}`, `!${paths.distprod}/**`, `!${paths.sass}`, `!${paths.sass}/**`],
-    ignoreFiles = [ '!readme.txt', '!readme.md', '!package.json', '!package-lock.json', '!gulpfile.js', '!gulpconfig.json', '!CHANGELOG.md', '!.travis.yml', '!jshintignore',  '!codesniffer.ruleset.xml' ];
+    let ignorePaths = [ 
+        paths.bower, `${paths.bower}/**`,
+        paths.node, `${paths.node}/**`,
+        paths.dev, `${paths.dev}/**`,
+        paths.dist, `${paths.dist}/**`,
+        paths.distprod, `${paths.distprod}/**`,
+        paths.sass, `${paths.sass}/**` ],
 
-  return gulp.src( ['**/*', ...ignorePaths, ...ignoreFiles,  '*'], { 'buffer': false } )
-  .pipe( replace( '/js/jquery.slim.min.js', `/js${paths.vendor}/jquery.slim.min.js`, { 'skipBinary': true } ) )
-  .pipe( replace( '/js/popper.min.js', `/js${paths.vendor}/popper.min.js`, { 'skipBinary': true } ) )
-  .pipe( replace( '/js/skip-link-focus-fix.js', `/js${paths.vendor}/skip-link-focus-fix.js`, { 'skipBinary': true } ) )
-    .pipe( gulp.dest( paths.dist ) );
+        ignoreFiles = [ 
+            'readme.txt',
+            'readme.md',
+            'package.json',
+            'package-lock.json',
+            'gulpfile.js',
+            'gulpconfig.json',
+            'CHANGELOG.md',
+            '.travis.yml',
+            'jshintignore',
+            'codesniffer.ruleset.xml' ];
+
+    ignoreFiles = ignoreFiles.map( _path => `!${path.resolve(_path)}` );
+    ignorePaths = ignorePaths.map( _path => `!${path.resolve(_path)}` );
+
+    return gulp.src( ['**/*', ...ignorePaths, ...ignoreFiles,  '*'], { 'buffer': false } )
+        .pipe( replace( '/js/jquery.slim.min.js', `/js${paths.vendor}/jquery.slim.min.js`, { 'skipBinary': true } ) )
+        .pipe( replace( '/js/popper.min.js', `/js${paths.vendor}/popper.min.js`, { 'skipBinary': true } ) )
+        .pipe( replace( '/js/skip-link-focus-fix.js', `/js${paths.vendor}/skip-link-focus-fix.js`, { 'skipBinary': true } ) )
+        .pipe( gulp.dest( paths.dist ) );
 }));
 
 // Deleting any file inside the /dist-product folder
