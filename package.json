@@ -4,7 +4,11 @@
   "description": "Basic Child Theme for UnderStrap Theme Framework: https://github.com/holger1411/understrap",
   "main": "index.js",
   "scripts": {
-    "postinstall": "gulp copy-assets"
+    "postinstall": "gulp copy-assets",
+    "vendor": "gulp copy-assets",
+    "clean": "gulp clean",
+    "compile": "gulp compile",
+    "recompile": "gulp clean && gulp copy-assets && gulp compile"
   },
   "repository": {
     "type": "git",
@@ -50,6 +54,7 @@
     "gulp-sourcemaps": "^2.6.5",
     "gulp-uglify": "^3.0.2",
     "gulp-watch": "^5.0.1",
+    "merge-stream": "^1.0.1",
     "merge2": "^1.2.3",
     "path": "^0.12.7",
     "popper.js": "^1.15.0",

@@ -25136,24 +25136,26 @@ if (process.env.NODE_ENV === 'production') {
 },{"./cjs/scheduler-tracing.development.js":11,"./cjs/scheduler-tracing.production.min.js":12,"_process":2}],17:[function(require,module,exports){
 'use strict';
 
+var _react = require("react");
+
 var _reactDom = require("react-dom");
 
 function Welcome(props) {
-  return React.createElement("h1", null, "Hello, ", props.name);
+  return _react.React.createElement("h1", null, "Hello, ", props.name);
 }
 
 function App() {
-  return React.createElement("div", null, React.createElement(Welcome, {
+  return _react.React.createElement("div", null, _react.React.createElement(Welcome, {
     name: "Sara"
-  }), React.createElement(Welcome, {
+  }), _react.React.createElement(Welcome, {
     name: "Cahal"
-  }), React.createElement(Welcome, {
+  }), _react.React.createElement(Welcome, {
     name: "Edite"
   }));
 }
 
-(0, _reactDom.render)(React.createElement(App, null), document.getElementById('root'));
+(0, _reactDom.render)(_react.React.createElement(App, null), document.getElementById('root'));
 
-},{"react-dom":7}]},{},[17])
+},{"react":10,"react-dom":7}]},{},[17])
 
 //# sourceMappingURL=child-theme-app.js.map
