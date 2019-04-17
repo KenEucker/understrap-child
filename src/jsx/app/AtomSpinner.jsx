@@ -81,11 +81,13 @@ const propTypes = {
   size: PropTypes.number,
   animationDuration: PropTypes.number,
   color: PropTypes.string,
+  text: PropTypes.string,
   className: PropTypes.string,
   style: PropTypes.object,
 };
 
 const defaultProps = {
+  text: '',
   size: 60,
   color: 'red',
   animationDuration: 1000,
@@ -93,6 +95,7 @@ const defaultProps = {
 };
 
 export const AtomSpinner = ({
+  text,
   size,
   animationDuration,
   color,
@@ -115,6 +118,9 @@ export const AtomSpinner = ({
       {/* Chrome renders little circles malformed */}
       <div className="spinner-circle">&#9679;</div>
     </div>
+	<p>
+		{text}
+	</p>
   </Atom>
 );
 

@@ -8,10 +8,9 @@ function App() {
   return (
     <AtomSpinner
     color='#000000'
-    size='200'
-    >
-      <h3>You are now reacting to wordpress</h3>
-    </AtomSpinner>
+	size='200'
+	
+    />
   )
 }
 
