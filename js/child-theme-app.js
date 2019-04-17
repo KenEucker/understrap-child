@@ -28829,7 +28829,7 @@ function App() {
   return _react["default"].createElement(_AtomSpinner["default"], {
     color: "#000000",
     size: "200"
-  });
+  }, _react["default"].createElement("h3", null, "You are now reacting to wordpress"));
 }
 
 (0, _reactDom.render)(_react["default"].createElement(App, null), document.getElementById('root'));

@@ -21,26 +21,22 @@ const autoprefixer = require( 'gulp-autoprefixer' );
 
 // Configuration file to keep your code DRY
 const cfg = require( './gulpconfig.json' );
+cfg.files = cfg.files || {};
+
 const paths = cfg.paths;
+const vendors = cfg.vendors;
+const themeFile = cfg.files.themeFile;
+const themeAppFile = cfg.files.themeAppFile;
 
-// Run:
-// gulp watch
-// Starts watcher. Watcher runs gulp sass task on changes
-gulp.task( 'watch', function() {
-    gulp.watch( `${paths.sass}/**/*.scss`, gulp.series('styles') );
-    gulp.watch( `${paths.jsx}/**/*.js*`, gulp.series('scripts') );
-
-    //Inside the watch task.
-    gulp.watch( `${paths.imgsrc} /**`, gulp.series('imagemin-watch') );
-});
+const babelifyOptions = cfg.babelifyOptions;
 
 // Run:
 // gulp imagemin
 // Running image optimizing task
 gulp.task( 'imagemin', function() {
-    gulp.src( `${paths.imgsrc}/**` )
+    gulp.src( `${path.resolve(paths.imgsrc)}/**` )
     .pipe( imagemin() )
-    .pipe( gulp.dest( paths.img ) );
+    .pipe( gulp.dest(path.resolve( paths.img) ) );
 });
 
 /**
@@ -55,7 +51,7 @@ gulp.task( 'imagemin-watch', gulp.series('imagemin', function reloadBrowserSync(
 // gulp sass
 // Compiles SCSS files in CSS
 gulp.task( 'sass', function() {
-    const stream = gulp.src( `${paths.sass}/*.scss` )
+    const stream = gulp.src( path.resolve(`${paths.sass}/*.scss`) )
         .pipe( sourcemaps.init( { loadMaps: true } ) )
         .pipe( plumber( {
             errorHandler: function( err ) {
@@ -72,7 +68,7 @@ gulp.task( 'sass', function() {
 });
 
 gulp.task( 'minifycss', function() {
-  return gulp.src( `${paths.css}/child-theme.css` )
+  return gulp.src( path.resolve(`${paths.css}/${themeFile}.css`) )
     .pipe( sourcemaps.init( { loadMaps: true } ) )
     .pipe( cleanCSS( { compatibility: '*' } ) )
     .pipe( plumber( {
@@ -83,11 +79,13 @@ gulp.task( 'minifycss', function() {
         } ) )
     .pipe( rename( { suffix: '.min' } ) )
     .pipe( sourcemaps.write( './' ) )
-    .pipe( gulp.dest( paths.css ) );
+    .pipe( gulp.dest( path.resolve(paths.css) ) );
 });
 
 gulp.task( 'cleancss', function() {
-  return gulp.src( [ `${paths.css}/*.min.*`, `${paths.css}/*.map` ], { read: false } ) // Much faster
+  return gulp.src( [ path.resolve(`${paths.css}/*.min.*`),
+        path.resolve(`${paths.css}/*.map`) ],
+        { read: false } ) // Much faster
     .pipe( rimraf() );
 });
 
@@ -101,7 +99,9 @@ gulp.task( 'browser-sync', function() {
 } );
 
 gulp.task( 'cleanjs', function() {
-  return gulp.src( [ `${paths.js}/*.min.*`, `${paths.js}/*.map` ], { read: false } ) // Much faster
+  return gulp.src( [ path.resolve(`${paths.js}/*.min.*`),
+        path.resolve(`${paths.js}/*.map`) ],
+    { read: false } ) // Much faster
     .pipe( rimraf() );
 });
 
@@ -113,16 +113,14 @@ gulp.task('react', function () {
       debug: true,
       paths: [ path.resolve(paths.node), path.resolve(paths.jsx) ]
     });
-
-    const babelifyOpts = { presets: ["@babel/preset-env", "@babel/preset-react"] };
   
-    const jsxStream = build.transform("babelify", babelifyOpts)
+    const jsxStream = build.transform("babelify", babelifyOptions)
         .bundle()
-        .pipe( source('child-theme-app.js') )
+        .pipe( source(`${themeAppFile}.js`) )
         .pipe( buffer() )
         .pipe( sourcemaps.init({loadMaps: true}) )
         .pipe( sourcemaps.write('./') )
-        .pipe( gulp.dest( paths.js ) );
+        .pipe( gulp.dest( path.resolve(paths.js) ) );
 
     const minBuild = browserify({
         entries: `${ paths.jsx }app.jsx`,
@@ -130,14 +128,14 @@ gulp.task('react', function () {
         });
   
     const jsxMinStream = minBuild
-        .transform("babelify", babelifyOpts)
+        .transform("babelify", babelifyOptions)
         .bundle()
-        .pipe( source('child-theme-app.min.js') )
+        .pipe( source(`${themeFile}-app.min.js`) )
         .pipe( buffer() )
         .pipe( sourcemaps.init({loadMaps: true}) )
         .pipe( uglify() )
         .pipe( sourcemaps.write('./') )
-        .pipe( gulp.dest( paths.js ) );
+        .pipe( gulp.dest( path.resolve(paths.js) ) );
 
     return merge(jsxStream, jsxMinStream);
   });
@@ -146,31 +144,31 @@ gulp.task( 'javascript', function () {
     const scripts = [
 
         // Start - All BS4 stuff
-        `${ paths.vendor }bootstrap4/js/bootstrap.bundle.js`,
+        `${ path.resolve(paths.vendor) }bootstrap4/js/bootstrap.bundle.js`,
 
         // End - All BS4 stuff
 
-        `${ paths.jsx }skip-link-focus-fix.js`,
+        `${ path.resolve(paths.jsx) }skip-link-focus-fix.js`,
 
         // Adding currently empty javascript file to add on for your own themes´ customizations
         // Please add any customizations to this .js file only!
-        `${ paths.jsx }custom-javascript.js`,
+        `${ path.resolve(paths.jsx) }custom-javascript.js`,
     ];
 
     const gulpOpts = { allowEmpty: true };
 
     const jsStream = gulp.src( scripts, gulpOpts )
         .pipe( sourcemaps.init({loadMaps: true}) )
-        .pipe( concat( 'child-theme.js' ) )
+        .pipe( concat( `${themeFile}.js` ) )
         .pipe( sourcemaps.write('./') )
-        .pipe( gulp.dest( paths.js ));
+        .pipe( gulp.dest( path.resolve(paths.js) ));
 
     const minJsStream = gulp.src( scripts, gulpOpts )
         .pipe( sourcemaps.init({loadMaps: true}) )
-        .pipe( concat( 'child-theme.min.js' ) )
+        .pipe( concat( `${themeFile}.min.js` ) )
         .pipe( uglify() )
         .pipe( sourcemaps.write('./') )
-        .pipe( gulp.dest( paths.js ));
+        .pipe( gulp.dest( path.resolve(paths.js) ));
 
     return merge(jsStream, minJsStream);
 } );
@@ -180,76 +178,54 @@ gulp.task( 'javascript', function () {
 // Uglifies and concat all JS files into one
 gulp.task( 'scripts', gulp.parallel( 'javascript', 'react' ));
 
-// Run:
-// gulp watch-bs
-// Starts watcher with browser-sync. Browser-sync reloads page automatically on your browser
-gulp.task( 'watch-bs', gulp.parallel('browser-sync', 'watch', 'scripts'));
-
 // Deleting any file inside the /src folder
 gulp.task('clean-source', function () {
-  return del(['src/**/*']);
+  return del([ `${path.resolve(paths.src)}/**/*` ]);
 });
 
 // Run:
-// gulp copy-assets.
+// gulp copy-vendors.
 // Copy all needed dependency assets files from bower_component assets to themes /js, /scss and /fonts folder. Run this task after bower install or bower update
 
 ////////////////// All Bootstrap SASS  Assets /////////////////////////
-gulp.task( 'copy-assets', function() {
+gulp.task( 'copy-vendors', function() {
 
-    ////////////////// All Bootstrap 4 Assets /////////////////////////
-    // Copy all JS files
-    const bsJsStream = gulp.src( `${paths.node}bootstrap/dist/js/**/*.js` )
-        .pipe( gulp.dest( `${paths.vendor}bootstrap4/js` ) );
+	const streams = [];
 
-    // Copy all Bootstrap SCSS files
-    const bsSassStream = gulp.src( `${paths.node}bootstrap/scss/**/*.scss` )
-        .pipe( gulp.dest( `${paths.vendor}bootstrap4/sass` ) );
+	for (const glob in vendors) {
+		const srcGlob = `${path.resolve(paths.node)}/${glob}`;
+		let dest = vendors[glob];
+		dest = dest[0] == '~' ? paths[dest.substr(1)] : `${paths.vendor}${dest}`;
+		dest = path.resolve(dest);
 
-    ////////////////// End Bootstrap 4 Assets /////////////////////////
+		// console.log('copying vendor into path', {glob, srcGlob, dest});
+		streams.push(gulp.src(srcGlob).pipe(gulp.dest(dest)));
+	}
 
-    // Copy all Font Awesome Fonts
-    const faFontStream = gulp.src( `${paths.node}font-awesome/fonts/**/*.{ttf,woff,woff2,eot,svg}` )
-        .pipe( gulp.dest( './fonts' ) );
-
-    // Copy all Font Awesome SCSS files
-    const faSassStream = gulp.src( `${paths.node}font-awesome/scss/*.scss` )
-        .pipe( gulp.dest( `${paths.vendor}fontawesome` ) );
-
-    // _s SCSS files
-    const usSassStream = gulp.src( `${paths.node}undescores-for-npm/sass/media/*.scss` )
-        .pipe( gulp.dest( `${paths.vendor}underscores` ) );
-
-    // _s JS files into /src/js
-    const usJsStream = gulp.src( `${paths.node}undescores-for-npm/js/skip-link-focus-fix.js` )
-        .pipe( gulp.dest( `${paths.jsx}` ) );
-
-    // Copy Popper JS files
-    const popperJsStream = gulp.src( `${paths.node}popper.js/dist/umd/popper.min.js` )
-        .pipe( gulp.dest( `${paths.js}` ) );
-    gulp.src( `${paths.node}popper.js/dist/umd/popper.js` )
-        .pipe( gulp.dest( `${paths.js}` ) );
-
-    // UnderStrap SCSS files
-    const popperSassStream = gulp.src( `${paths.node}understrap/sass/**/*.scss` )
-        .pipe( gulp.dest( `${paths.vendor}/understrap` ) );
-
-    return merge(bsJsStream, bsSassStream, faFontStream, faSassStream, usSassStream, usJsStream, popperJsStream, popperSassStream);
+    return merge(streams);
 });
 
-// Deleting the files distributed by the copy-assets task
+// Deleting the files distributed by the copy-vendors task
 gulp.task( 'clean-vendor-assets', function() {
-    const vendorAssets = [ 'bootstrap4/**', 'underscores/**', 'understrap/**', 'fontawesome/**', 'skip-link-focus-fix.js', 'popper.min.js', 'popper.js', './fonts/*wesome*.{ttf,woff,woff2,eot,svg}'];
-    let vendorAssetsPaths = vendorAssets.map( vendor => path.resolve(paths.vendor, vendor) );
-    vendorAssetsPaths = vendorAssetsPaths.concat(vendorAssets.map( vendor => vendor[0] == '.' ? path.resolve(vendor) : path.resolve(paths.js, vendor) ))
-    vendorAssetsPaths = vendorAssetsPaths.concat(vendorAssets.map( vendor => vendor[0] == '.' ? path.resolve(vendor) : path.resolve(paths.jsx, vendor) ))
+    const vendorExtensions = [ '.js', '.css' ]
+    let vendorAssetsPaths = [ paths.vendor ];
 
-  return del( vendorAssetsPaths );
+    for (const glob in vendors) {
+        let dest = vendors[glob];
+        dest = dest[0] == '~' ? paths[dest.substr(1)] : `${paths.vendor}${dest}`;
+        if ((glob.indexOf('*') == -1) && (vendorExtensions.indexOf(path.extname(glob)) !== -1)) {
+            const split = glob.split('/');
+            dest = `${dest}${split[split.length - 1]}`;
+        }
+        vendorAssetsPaths.push(path.resolve(dest));
+    }
+
+    return del( vendorAssetsPaths );
 });
 
 // Deleting any file inside the /dist folder
 gulp.task( 'clean-dist', function() {
-  return del( [`${paths.dist}/**`] );
+  return del( [`${path.resolve(paths.dist)}/**`] );
 });
 
 // Run
@@ -289,7 +265,7 @@ gulp.task( 'dist', gulp.series('clean-dist', function copyToDistFolder() {
 
 // Deleting any file inside the /dist-product folder
 gulp.task( 'clean-dist-product', function() {
-  return del( [`${paths.distprod}/**`] );
+  return del( [ `${path.resolve(paths.distprod)}/**`] );
 } );
 
 // Run
@@ -317,10 +293,14 @@ gulp.task( 'dist-product', gulp.series('clean-dist-product', function copyToDist
     ignorePaths = ignorePaths.map( _path => `!${path.resolve(_path)}` );
     ignoreFiles = ignoreFiles.map( _path => `!${path.resolve(_path)}` );
 
-    const ignoreAllButMinifiedFiles = [ `!${paths.js}/**/!(*.min)*.js*`, `!${paths.js}/**/*.map`, `!${paths.css}/**/!(*.min)*.css*`, `!${paths.css}/**/*.map` ];
+    const ignoreAllButMinifiedFiles = [
+        `!${path.resolve(paths.js)}/**/!(*.min)*.js*`,
+        `!${path.resolve(paths.js)}/**/*.map`,
+        `!${path.resolve(paths.css)}/**/!(*.min)*.css*`,
+        `!${path.resolve(paths.css)}/**/*.map` ];
 
     return gulp.src( ['**/*', ...ignorePaths, ...ignoreFiles, ...ignoreAllButMinifiedFiles ] )
-        .pipe( gulp.dest( paths.distprod ) );
+        .pipe( gulp.dest( path.resolve(paths.distprod) ) );
 } ));
 
 // Run:
@@ -328,5 +308,27 @@ gulp.task( 'dist-product', gulp.series('clean-dist-product', function copyToDist
 // Cleans all of the output folders
 gulp.task( 'clean', gulp.parallel( 'cleanjs', 'cleancss', 'clean-dist', 'clean-dist-product', 'clean-vendor-assets' ));
 
-// Deleting any file inside the /dist-product folder
+// Run:
+// gulp compile
+// runs the styles and scripts tasks before the dist task
 gulp.task( 'compile', gulp.series( 'styles', 'scripts', 'dist' ));
+
+// Run:
+// gulp watch
+// Starts watcher. Watcher runs gulp sass task on changes
+gulp.task( 'watch', function() {
+	const sassSrc = `${path.resolve(paths.sass)}/**/*.scss`,
+		jsSrc = `${path.resolve(paths.jsx)}/**/*.js*`,
+		imgSrc = `${path.resolve(paths.imgsrc)}/**/*.js*`;
+
+    gulp.watch( sassSrc, gulp.series('styles') );
+    gulp.watch( jsSrc, gulp.series('scripts') );
+
+    //Inside the watch task.
+    gulp.watch( imgSrc, gulp.series('imagemin-watch') );
+});
+
+// Run:
+// gulp watch-bs
+// Starts watcher with browser-sync. Browser-sync reloads page automatically on your browser
+gulp.task( 'watch-bs', gulp.parallel( 'browser-sync', 'watch' ));

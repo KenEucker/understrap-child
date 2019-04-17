@@ -1,14 +1,16 @@
 {
   "name": "understrap-child",
-  "version": "0.5.5",
+  "version": "0.6.0",
   "description": "Basic Child Theme for UnderStrap Theme Framework: https://github.com/holger1411/understrap",
   "main": "index.js",
   "scripts": {
-    "postinstall": "gulp copy-assets",
-    "vendor": "gulp copy-assets",
+    "postinstall": "gulp copy-vendors",
     "clean": "gulp clean",
     "compile": "gulp compile",
-    "recompile": "gulp clean && gulp copy-assets && gulp compile"
+    "dev": "gulp watch-bs",
+    "recompile": "gulp clean && gulp copy-vendors && gulp compile",
+    "vendor": "gulp copy-vendors",
+    "watch": "gulp watch"
   },
   "repository": {
     "type": "git",

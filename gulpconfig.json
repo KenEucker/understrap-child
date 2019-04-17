@@ -1,6 +1,11 @@
 {
+  "babelifyOptions": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ]},
   "browserSyncOptions" : {
-    "proxy": "localhost/wordpress/",
+    "proxy": "understrap.dev",
     "notify": false
   },
   "browserSyncWatchFiles" : [
@@ -8,16 +13,31 @@
     "./js/*.min.js",
     "./**/*.php"
   ],
+  "files": {
+	  "themeFile": "child-theme",
+	  "themeAppFile": "child-theme-app"
+  },
+  "vendors": {
+    "bootstrap/dist/js/**/*.js": "bootstrap4/js",
+    "bootstrap/scss/**/*.scss": "bootstrap4/sass",
+    "font-awesome/fonts/**/*.{ttf,woff,woff2,eot,svg}": "~fonts",
+    "font-awesome/scss/*.scss": "fontawesome",
+    "undescores-for-npm/sass/media/*.scss": "underscores",
+    "undescores-for-npm/js/skip-link-focus-fix.js": "~jsx",
+    "popper.js/dist/umd/popper.min.js": "~jsx",
+    "understrap/sass/**/*.scss": "understrap"
+  },
   "paths" : {
     "js": "./js",
+    "jsx": "./src/jsx/",
     "css": "./css",
-    "img": "./img",
-		"imgsrc": "./src/img",
-    "jsx": "./src/js/",
     "sass": "./src/sass/",
+    "img": "./img",
+    "imgsrc": "./src/img/",
+    "fonts": "./fonts",
     "vendor": "./src/vendor/",
-    "node": "./node_modules/",
-    "bower": "./bower_components/",
+    "node": "./node_modules",
+    "bower": "./bower_components",
     "dev": "./src",
     "dist": "./dist",
     "distprod": "./dist-product"
