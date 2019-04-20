@@ -1,4 +1,13 @@
-# understrap-child
+# Reactivated Understrap Child theme
+understrap-child with babel/jsx compilation and react imported on the front end. Supports es6 and pure javascript side by side in the /src/js/ folder. The rest of the theme is the same setup with underscores and bootstrap with sass compilation.
+
+Other than that I've just cleaned things up and updated dependencies. (oh, and I built mocha tests, right?)
+
+Personally, I use this theme inside a docker developer environment:
+https://github.com/keneucker/wordpress-devcontainer
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+## understrap-child documentation (ORIGIN)
 Basic Child Theme for UnderStrap Theme Framework: https://github.com/understrap/understrap
 
 ## How it works
