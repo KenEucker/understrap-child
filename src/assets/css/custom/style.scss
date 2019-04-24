@@ -1,0 +1,27 @@
+/*!
+Theme Name: WPGulpTheme
+Theme URI: https://github.com/ahmadawais/WPGulpTheme
+Description: A theme to demonstrate simplest implementation of WPGulp Boilerplate.
+Version: 2.2.0
+Author: Ahmad Awais
+Author URI: https://twitter.com/MrAhmadAwais/
+License: MIT
+Text Domain: WPGT
+*/
+
+// Mixins & Variables.
+@import 'partials/mixins';
+@import 'partials/variables';
+
+// Normalize & Santize.
+@import '../vendor/normalize';
+@import '../vendor/sanitize';
+
+// Structure.
+@import 'partials/structure';
+
+// WPCore.
+@import 'partials/wpcore';
+
+// Base.
+@import 'partials/base';
