@@ -3,7 +3,11 @@
     "presets": [
       "@babel/preset-env",
       "@babel/preset-react"
-    ]},
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
+    ]
+  },
   "browserSyncOptions" : {
     "proxy": "understrap.dev",
     "notify": false

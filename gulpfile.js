@@ -329,9 +329,9 @@ gulp.task( 'watch', function() {
 });
 
 // Run:
-// gulp watch
+// gulp watch-bundle
 // Starts watcher. Watcher runs gulp sass task on changes
-gulp.task( 'watch-bundle', function() {
+gulp.task( 'watch-compile', function() {
 	const sassSrc = `${path.resolve(paths.sass)}/**/*.scss`,
 		jsSrc = `${path.resolve(paths.jsx)}/**/*.js*`,
 		imgSrc = `${path.resolve(paths.imgsrc)}/**/*.js*`;
@@ -340,7 +340,7 @@ gulp.task( 'watch-bundle', function() {
     gulp.watch( jsSrc, gulp.series( 'scripts', 'dist' ) );
 
     //Inside the watch task.
-    gulp.watch( imgSrc, gulp.series('imagemin-watch') );
+    gulp.watch( imgSrc, gulp.series('imagemin-watch', 'dist' ) );
 });
 
 // Run:

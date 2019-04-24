@@ -28829,7 +28829,7 @@ function App() {
   return _react["default"].createElement(_AtomSpinner["default"], {
     color: "#000000",
     size: "200"
-  }, _react["default"].createElement("h3", null, "You are now reacting to wordpress"));
+  });
 }
 
 (0, _reactDom.render)(_react["default"].createElement(App, null), document.getElementById('root'));
@@ -28857,7 +28857,7 @@ function _objectWithoutProperties(source, excluded) { if (source == null) return
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n  height: ", "px;\n  width: ", "px;\n  overflow: hidden;\n\n  * {\n    box-sizing: border-box;\n  }\n\n  .spinner-inner {\n    position: relative;\n    display: block;\n    height: 100%;\n    width: 100%;\n  }\n\n  .spinner-circle {\n    display: block;\n    position: absolute;\n    color: ", ";\n    font-size: calc(", "px * 0.24);\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n  }\n\n  .spinner-line {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    border-radius: 50%;\n    animation-duration: ", "ms;\n    border-left-width: calc(", "px / 25);\n    border-top-width: calc(", "px / 25);\n    border-left-color: ", ";\n    border-left-style: solid;\n    border-top-style: solid;\n    border-top-color: transparent;\n  }\n\n  .spinner-line:nth-child(1) {\n    animation: atom-spinner-animation-1 ", "ms\n      linear infinite;\n    transform: rotateZ(120deg) rotateX(66deg) rotateZ(0deg);\n  }\n\n  .spinner-line:nth-child(2) {\n    animation: atom-spinner-animation-2 ", "ms\n      linear infinite;\n    transform: rotateZ(240deg) rotateX(66deg) rotateZ(0deg);\n  }\n\n  .spinner-line:nth-child(3) {\n    animation: atom-spinner-animation-3 ", "ms\n      linear infinite;\n    transform: rotateZ(360deg) rotateX(66deg) rotateZ(0deg);\n  }\n\n  @keyframes atom-spinner-animation-1 {\n    100% {\n      transform: rotateZ(120deg) rotateX(66deg) rotateZ(360deg);\n    }\n  }\n  @keyframes atom-spinner-animation-2 {\n    100% {\n      transform: rotateZ(240deg) rotateX(66deg) rotateZ(360deg);\n    }\n  }\n  @keyframes atom-spinner-animation-3 {\n    100% {\n      transform: rotateZ(360deg) rotateX(66deg) rotateZ(360deg);\n    }\n  }\n"]);
+  var data = _taggedTemplateLiteral(["\n  height: ", "px;\n  width: ", "px;\n\n  * {\n    box-sizing: border-box;\n  }\n\n  p {\n\t  text-align: center;\n  }\n\n  .spinner-inner {\n    position: relative;\n    display: block;\n    height: 100%;\n    width: 100%;\n  }\n\n  .spinner-circle {\n    display: block;\n    position: absolute;\n    color: ", ";\n    font-size: calc(", "px * 0.24);\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n  }\n\n  .spinner-line {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    border-radius: 50%;\n    animation-duration: ", "ms;\n    border-left-width: calc(", "px / 25);\n    border-top-width: calc(", "px / 25);\n    border-left-color: ", ";\n    border-left-style: solid;\n    border-top-style: solid;\n    border-top-color: transparent;\n  }\n\n  .spinner-line:nth-child(1) {\n    animation: atom-spinner-animation-1 ", "ms\n      linear infinite;\n    transform: rotateZ(120deg) rotateX(66deg) rotateZ(0deg);\n  }\n\n  .spinner-line:nth-child(2) {\n    animation: atom-spinner-animation-2 ", "ms\n      linear infinite;\n    transform: rotateZ(240deg) rotateX(66deg) rotateZ(0deg);\n  }\n\n  .spinner-line:nth-child(3) {\n    animation: atom-spinner-animation-3 ", "ms\n      linear infinite;\n    transform: rotateZ(360deg) rotateX(66deg) rotateZ(0deg);\n  }\n\n  @keyframes atom-spinner-animation-1 {\n    100% {\n      transform: rotateZ(120deg) rotateX(66deg) rotateZ(360deg);\n    }\n  }\n  @keyframes atom-spinner-animation-2 {\n    100% {\n      transform: rotateZ(240deg) rotateX(66deg) rotateZ(360deg);\n    }\n  }\n  @keyframes atom-spinner-animation-3 {\n    100% {\n      transform: rotateZ(360deg) rotateX(66deg) rotateZ(360deg);\n    }\n  }\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -28896,10 +28896,12 @@ var propTypes = {
   size: _propTypes["default"].number,
   animationDuration: _propTypes["default"].number,
   color: _propTypes["default"].string,
+  text: _propTypes["default"].string,
   className: _propTypes["default"].string,
   style: _propTypes["default"].object
 };
 var defaultProps = {
+  text: '',
   size: 60,
   color: 'red',
   animationDuration: 1000,
@@ -28907,12 +28909,13 @@ var defaultProps = {
 };
 
 var AtomSpinner = function AtomSpinner(_ref) {
-  var size = _ref.size,
+  var text = _ref.text,
+      size = _ref.size,
       animationDuration = _ref.animationDuration,
       color = _ref.color,
       className = _ref.className,
       style = _ref.style,
-      props = _objectWithoutProperties(_ref, ["size", "animationDuration", "color", "className", "style"]);
+      props = _objectWithoutProperties(_ref, ["text", "size", "animationDuration", "color", "className", "style"]);
 
   return _react["default"].createElement(Atom, _extends({
     size: size,
@@ -28930,7 +28933,7 @@ var AtomSpinner = function AtomSpinner(_ref) {
     className: "spinner-line"
   }), _react["default"].createElement("div", {
     className: "spinner-circle"
-  }, "\u25CF")));
+  }, "\u25CF"), _react["default"].createElement("p", null, text)));
 };
 
 exports.AtomSpinner = AtomSpinner;

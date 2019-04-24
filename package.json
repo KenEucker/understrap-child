@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/holger1411/understrap-child.git"
+    "url": "https://github.com/keneucker/understrap-child.git"
   },
   "keywords": [
     "wordpress",
@@ -26,13 +26,15 @@
   "author": "Holger Koenemann",
   "license": "GPL-2.0",
   "bugs": {
-    "url": "https://github.com/holger1411/understrap-child/issues"
+    "url": "https://github.com/keneucker/understrap-child/issues"
   },
   "homepage": "https://understrap.com",
   "dependencies": {
     "@babel/core": "^7.4.3",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
+    "@weknow/react-bubble-chart-d3": "^1.0.11",
     "babelify": "^10.0.0",
     "browserify": "^16.2.3",
     "del": "^4.1.0",
@@ -62,6 +64,7 @@
     "popper.js": "^1.15.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-horizontal-timeline": "^1.5.3",
     "run-sequence": "^2.2.1",
     "styled-components": "^4.2.0",
     "understrap": "^0.9.1",

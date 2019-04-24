@@ -34,3 +34,17 @@ function add_child_theme_textdomain() {
     load_child_theme_textdomain( 'understrap-child', get_stylesheet_directory() . '/languages' );
 }
 add_action( 'after_setup_theme', 'add_child_theme_textdomain' );
+
+function understrap_block_templates( ) {
+	$post_type_object = get_post_type_object( 'post' );
+	$post_type_object->template = array(
+		array( 'core/image', array(
+		) ),
+		array( 'core/paragraph', array(
+			'placeholder' => 'Add Description...',
+		) ),
+	);
+	$post_type_object->template_lock = 'all';
+  }
+
+  // add_action( 'init', 'understrap_block_templates', 10, 2 );

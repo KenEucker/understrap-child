@@ -5,10 +5,13 @@ import styled from 'styled-components';
 const Atom = styled.div`
   height: ${props => props.size}px;
   width: ${props => props.size}px;
-  overflow: hidden;
 
   * {
     box-sizing: border-box;
+  }
+
+  p {
+	  text-align: center;
   }
 
   .spinner-inner {
@@ -104,24 +107,24 @@ export const AtomSpinner = ({
   ...props
 }) => (
   <Atom
-    size={size}
-    color={color}
-    animationDuration={animationDuration}
-    className={`atom-spinner${className ? ' ' + className : ''}`}
-    style={style}
-    {...props}
-  >
-    <div className="spinner-inner">
-      <div className="spinner-line" />
-      <div className="spinner-line" />
-      <div className="spinner-line" />
-      {/* Chrome renders little circles malformed */}
-      <div className="spinner-circle">&#9679;</div>
-    </div>
-	<p>
-		{text}
-	</p>
-  </Atom>
+		size={size}
+		color={color}
+		animationDuration={animationDuration}
+		className={`atom-spinner${className ? ' ' + className : ''}`}
+		style={style}
+		{...props}
+	>
+		<div className="spinner-inner">
+			<div className="spinner-line" />
+			<div className="spinner-line" />
+			<div className="spinner-line" />
+			{/* Chrome renders little circles malformed */}
+			<div className="spinner-circle">&#9679;</div>
+			<p>
+				{text}
+			</p>
+		</div>
+	</Atom>
 );
 
 AtomSpinner.propTypes = propTypes;
